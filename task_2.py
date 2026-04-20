@@ -1,48 +1,16 @@
 from task_1 import Stack
 
-# def is_even(short_list, first_ind, second_ind):
-#     cut_list = short_list[first_ind:second_ind]
-#     # print(cut_list)
-
-# def check_stack(stack):
-#     if stack.size() % 2:
-#         print('Несбалансированно')
-#
-#     else:
-#         pairs = 0
-#         # try:
-#             # for first_ind, frst_element in enumerate(stack):
-#             #     short_list = stack[first_ind + 1:]
-#             #
-#             #     for second_ind, snd_element in enumerate(short_list):
-#             #         if (frst_element == '[' and snd_element == ']'
-#             #                 or frst_element == '(' and snd_element == ')'
-#             #                 or frst_element == '{' and snd_element == '}'):
-#             #             is_even(short_list,first_ind,second_ind)
-#         try:
-#             for index, element in enumerate(stack):
-#                 if (element == '[' and stack[index + 1] == ']' or
-#                     element == '(' and stack[index + 1] == ')' or
-#                     element == '{' and stack[index + 1] == '}'):
-#                     pairs += 1
-#
-#                     for sym_count in range(index):
-#
-#
-#
-#         except:
-#             pass
 
 def check_for_match(opn_elem, cls_elem):
-    if (opn_elem == '[' and cls_elem or
+    if (opn_elem == '[' and cls_elem == ']' or
             opn_elem == '{' and cls_elem == '}' or
             opn_elem == '(' and cls_elem == ')'):
         return True
     return False
 
 def check_stack(stack):
-    brackets_open = ['(','[','{']
-    if stack.size() % 2:
+
+    if stack.size() % 2 != 0:
         print('Несбалансированно')
         return
 
@@ -53,32 +21,46 @@ def check_stack(stack):
         return
 
     else:
-        for checks in range(stack.size() - 1):
-            first_out = stack.pop()
-            count = stack.count(first_out)
-            if first_out in brackets_open:
-                print('Несбалансированно')
-                return
+        pairs_found = 0
+        expected_pairs = int(stack.size()) / 2
+        brackets_open = ['(', '[', '{']
 
-            else:
-                for index, element in enumerate(stack):
-                    if check_for_match(element, first_out):
-                        if count > 1:
-                            count -= 1
-                            continue
-                        else:
+        for check in range(stack.size()):
+            count_open = 0
+            count_close = 0
+            cls_element = stack.pop()
+            if cls_element in brackets_open:                            #([(())]{[]})
+                continue
+
+            for element in stack[::-1]:
+                if check_for_match(element, cls_element) and count_open == count_close:
+                    pairs_found += 1
+                    break
+
+                else:
+                    if element in brackets_open:
+                        count_open += 1
+
+                    else:
+                        count_close += 1
+
+
+        if pairs_found != expected_pairs:
+            print(pairs_found)
+            print(expected_pairs)
+            print('Несбалансированно')
+        else:
+            print('Сбалансировано')
+
+if __name__ == '__main__':
+    b = Stack('][][][')
+    c = Stack('([(())]{[]})')
+    x = Stack('(([{())]})')
+    y = Stack('(]][[)')
+    test = Stack('[([])((([[[]]])))]{()}')
+    check_stack(test)
 
 
 
-
-
-
-a = Stack('[][][]')
-b = Stack('][][][')
-
-
-x = Stack('((()))')
-y = Stack('}{}')
-# check_stack(x)
 
 
